@@ -23,6 +23,7 @@ import com.ivan1pl.animations.triggers.TriggerBuilderData;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -128,4 +129,17 @@ public abstract class Animation implements Serializable {
     public void setSoundData(SoundData soundData) {
         this.soundData = soundData;
     }
+
+    public void save(ConfigurationSection config) {
+        config.set("Interval",interval);
+        if(soundData!=null) soundData.save(config);
+        if(triggerBuilderData!=null) triggerBuilderData.save(config);
+    }
+
+    public static void load(Animation animation, ConfigurationSection config) {
+        animation.interval = config.getInt("Interval");
+        animation.setSoundData(SoundData.load(config));
+        animation.setTriggerBuilderData(TriggerBuilderData.load(config));
+    }
+
 }

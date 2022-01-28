@@ -20,6 +20,7 @@ package com.ivan1pl.animations.data;
 
 import com.ivan1pl.animations.exceptions.InvalidSelectionException;
 import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -157,5 +158,9 @@ public class StationaryAnimation extends Animation implements Serializable {
 
     public Selection getSelection() {
         return selection;
+    }
+
+    @Override
+    public void save(ConfigurationSection config) {
     }
 }

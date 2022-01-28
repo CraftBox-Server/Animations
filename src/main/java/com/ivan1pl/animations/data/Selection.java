@@ -19,6 +19,8 @@
 package com.ivan1pl.animations.data;
 
 import org.bukkit.Location;
+import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.io.Serializable;
 
@@ -130,5 +132,19 @@ public class Selection implements Serializable {
 
     public AnimationsLocation getPoint2() {
         return point2;
+    }
+
+    public void save(ConfigurationSection config) {
+        ConfigurationSection section = config.createSection("Selection");
+        point1.save("Point1",section);
+        point2.save("Point2",section);
+    }
+
+    public static Selection load(ConfigurationSection config) {
+        ConfigurationSection section = config.getConfigurationSection("Selection");
+        Selection selection = new Selection();
+        selection.point1 = (AnimationsLocation.load("Point1",config));
+        selection.point2 = (AnimationsLocation.load("Point2",config));
+        return selection;
     }
 }
