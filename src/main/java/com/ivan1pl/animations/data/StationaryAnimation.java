@@ -144,7 +144,7 @@ public class StationaryAnimation extends Animation implements Serializable {
                 if(frame instanceof BlockIdFrame) {
                 ((BlockIdFrame)frame).init();
             }
-    }
+        }
         for(int i=0;i<frames.size();i++) {
             IFrame frame = frames.get(i);
             if(frame instanceof BlockIdFrame) {
@@ -161,14 +161,35 @@ public class StationaryAnimation extends Animation implements Serializable {
     }
 
     @Override
-    public void save(ConfigurationSection config) {
-        super.save(config);
+    public void save(File folder, ConfigurationSection config) {
+        super.save(folder, config);
+        config.set("AnimationType",AnimationType.STATIONARY.name());
         selection.save(config);
+        config.set("Frames", frames.size());
+        //ConfigurationSection frameSection = config.createSection("Frames");
+        if(frames.size()>0 && frames.get(0) instanceof MCMEStoragePlotFrame) {
+            if(!folder.exists()) {
+                folder.mkdir();
+            }
+            for(int i = 0; i< frames.size(); i++) {
+                ((MCMEStoragePlotFrame)frames.get(i)).save(new File(folder,"frame_"+i+".mcme"));
+                //((MCMEStoragePlotFrame)frames.get(i)).save(""+i, frameSection);
+            }
+        }
     }
 
     public static StationaryAnimation load(ConfigurationSection config) throws InvalidSelectionException {
         StationaryAnimation animation = new StationaryAnimation(Selection.load(config));
         Animation.load(animation,config);
+        /*ConfigurationSection frameSection = config.getConfigurationSection("Frames");
+        int i = 0;
+        while (frameSection.isSet("" + i)) {
+            animation.frames.add(MCMEStoragePlotFrame.load("" + i, frameSection));
+        }*/
+        int frames = config.getInt("Frames");
+        for(int i = 0; i < frames; i++) {
+            animation.frames.add(MCMEStoragePlotFrame.fromSelection(animation.getSelection()));
+        }
         return animation;
     }
 }

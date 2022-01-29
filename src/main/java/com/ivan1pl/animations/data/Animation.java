@@ -130,7 +130,7 @@ public abstract class Animation implements Serializable {
         this.soundData = soundData;
     }
 
-    public void save(ConfigurationSection config) {
+    public void save(File folder, ConfigurationSection config) {
         config.set("Interval",interval);
         if(soundData!=null) soundData.save(config);
         if(triggerBuilderData!=null) triggerBuilderData.save(config);

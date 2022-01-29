@@ -30,6 +30,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Fence;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
@@ -286,4 +287,28 @@ public class MCMEStoragePlotFrame implements Serializable, IFrame, IStoragePlot 
     public String getWorldName() {
         return worldName;
     }
+
+    /*public void save(String key, ConfigurationSection config) {
+        ConfigurationSection section = config.createSection(key);
+        section.set("WorldName", worldName);
+        section.set("X",x);
+        section.set("Y",y);
+        section.set("Z",z);
+        section.set("SizeX",sizeX);
+        section.set("SizeY",sizeY);
+        section.set("SizeZ",sizeZ);
+    }
+
+    public static MCMEStoragePlotFrame load(String key, ConfigurationSection config) {
+        ConfigurationSection section = config.getConfigurationSection(key);
+        MCMEStoragePlotFrame frame = new MCMEStoragePlotFrame();
+        frame.worldName = section.getString("WorldName");
+        frame.x = section.getInt("X");
+        frame.y= section.getInt("Y");
+        frame.z = section.getInt("Z");
+        frame.sizeX = section.getInt("SizeX");
+        frame.sizeY = section.getInt("SizeY");
+        frame.sizeZ = section.getInt("SizeZ");
+        return frame;
+    }*/
 }

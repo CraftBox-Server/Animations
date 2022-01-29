@@ -28,6 +28,7 @@ import com.ivan1pl.animations.utils.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -161,26 +162,30 @@ public class Animations {
     }
     
     private static boolean saveAnimation(String name, Animation animation) {
-        FileOutputStream fstream = null;
-        ObjectOutputStream ostream = null;
+        //FileOutputStream fstream = null;
+        //ObjectOutputStream ostream = null;
         boolean result = true;
         try {
             File folder = new File(PLUGIN_DIR, name);
             if(!folder.exists()) {
                 folder.mkdir();
             }
-            File f = new File(folder, "data.anim");
+            //File f = new File(folder, "data.anim");
+            File f = new File(folder, "animation.yml");
             Files.deleteIfExists(f.toPath());
             
-            fstream = new FileOutputStream(f);
-            ostream = new ObjectOutputStream(fstream);
-            
+            //fstream = new FileOutputStream(f);
+            //ostream = new ObjectOutputStream(fstream);
+            YamlConfiguration config = new YamlConfiguration();
+
             //ostream.writeObject(animation);
-            animation.saveTo(folder, ostream);
+            //animation.saveTo(folder, ostream);
+            animation.save(folder, config);
+            config.save(f);
         } catch (IOException ex) {
             Logger.getLogger(Animations.class.getName()).log(Level.SEVERE, null, ex);
             result = false;
-        } finally {
+        }/* finally {
             try {
                 if (ostream != null) {
                     ostream.close();
@@ -192,14 +197,14 @@ public class Animations {
                 Logger.getLogger(Animations.class.getName()).log(Level.SEVERE, null, ex);
                 result = false;
             }
-        }
+        }*/
         return result;
     }
     
     public static boolean deleteAnimation(String name) {
         File f = new File(PLUGIN_DIR, name + ".anim");
         File folder = new File(PLUGIN_DIR, name);
-        boolean retval = f.delete() || new File(folder,"data.anim").delete();
+        boolean retval = f.delete() || new File(folder,"data.anim").delete() || new File(folder,"animation.yml").delete();
         for(File file: folder.listFiles()) {
             retval = retval && file.delete();
         }
@@ -246,19 +251,28 @@ public class Animations {
     }
     
     public static void reloadAnimation(String name) {
-        File f = new File(new File(PLUGIN_DIR, name),"data.anim");
+        File f = new File(new File(PLUGIN_DIR, name),"animation.yml");
+        //File f = new File(new File(PLUGIN_DIR, name),"data.anim");
         boolean conversion = false;
         if(!f.exists()) {
             conversion = true;
-            f = new File(PLUGIN_DIR, name + ".anim");
+            f = new File(new File(PLUGIN_DIR, name),"data.anim");
+            if(!f.exists()) {
+                f = new File(PLUGIN_DIR, name + ".anim");
+            }
         }
         FileInputStream fstream = null;
         ObjectInputStream ostream = null;
         try {
-            fstream = new FileInputStream(f);
-            ostream = new ObjectInputStream(fstream);
+            Animation animation;
+            if(conversion) {
+                fstream = new FileInputStream(f);
+                ostream = new ObjectInputStream(fstream);
 
-            Animation animation = (Animation) ostream.readObject();
+                animation = (Animation) ostream.readObject();
+            } else {
+                animation = AnimationFactory.loadAnimation(f);
+            }
             
             
             if (animation != null) {

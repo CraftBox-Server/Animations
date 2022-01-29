@@ -34,7 +34,9 @@ import java.util.List;
  * @author Ivan1pl
  */
 public class TriggerBuilderData implements Serializable {
-    
+
+    private static final long serialVersionUID = -955742584558670327L;
+
     private final TriggerType type;
     private final int range;
     private final String password;
@@ -142,13 +144,13 @@ public class TriggerBuilderData implements Serializable {
                     triggerButtons.add(MouseButton.valueOf(buttonSection.getString(""+i)));
                 }
             }
-            return new TriggerBuilderData(TriggerType.valueOf(config.getString("TriggerType")),
-                                            config.getInt("Range"),
-                                            config.getString("Password",null),
-                                            triggerBlocks,
-                                            triggerButtons,
-                                            config.getString("AnimationName",null),
-                                            config.getInt("Frame",-1));
+            return new TriggerBuilderData(TriggerType.valueOf(section.getString("TriggerType")),
+                    section.getInt("Range"),
+                    section.getString("Password",null),
+                    triggerBlocks,
+                    triggerButtons,
+                    section.getString("AnimationName",null),
+                    section.getInt("Frame",-1));
 
         }
     }

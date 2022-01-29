@@ -29,6 +29,8 @@ import java.io.Serializable;
  * @author Ivan1pl
  */
 public class Selection implements Serializable {
+
+    private static final long serialVersionUID = 3063220770448203490L;
     
     private AnimationsLocation point1;
     private AnimationsLocation point2;
@@ -126,6 +128,12 @@ public class Selection implements Serializable {
         return new Location(point1.getWorld(), cX, cY, cZ);
     }
 
+    public Location getLowerCorner() {
+        return new Location(point1.getWorld(), Math.min(point1.getBlockX(), point2.getBlockX()),
+                Math.min(point1.getBlockY(), point2.getBlockY()),
+                Math.min(point1.getBlockZ(), point2.getBlockZ()));
+    }
+
     public AnimationsLocation getPoint1() {
         return point1;
     }
@@ -143,8 +151,8 @@ public class Selection implements Serializable {
     public static Selection load(ConfigurationSection config) {
         ConfigurationSection section = config.getConfigurationSection("Selection");
         Selection selection = new Selection();
-        selection.point1 = (AnimationsLocation.load("Point1",config));
-        selection.point2 = (AnimationsLocation.load("Point2",config));
+        selection.point1 = (AnimationsLocation.load("Point1",section));
+        selection.point2 = (AnimationsLocation.load("Point2",section));
         return selection;
     }
 }

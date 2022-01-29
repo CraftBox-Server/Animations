@@ -199,13 +199,26 @@ public class MovingAnimation extends Animation implements Serializable {
     }
 
     @Override
-    public void save(ConfigurationSection config) {
-        super.save(config);
+    public void save(File folder, ConfigurationSection config) {
+        super.save(folder, config);
+        config.set("AnimationType",AnimationType.STATIONARY.name());
         selection.save(config);
         config.set("StepX",stepX);
         config.set("StepY",stepY);
         config.set("StepZ",stepZ);
         config.set("MaxDistance",maxDistance);
+        if(background instanceof MCMEStoragePlotFrame) {
+            if(!folder.exists()) {
+                folder.mkdir();
+            }
+            ((MCMEStoragePlotFrame)background).save(new File(folder,"background.mcme"));
+        }
+        if(frame instanceof MCMEStoragePlotFrame) {
+            if(!folder.exists()) {
+                folder.mkdir();
+            }
+            ((MCMEStoragePlotFrame)frame).save(new File(folder,"frame.mcme"));
+        }
     }
 
     public static MovingAnimation load(ConfigurationSection config) throws InvalidSelectionException {
@@ -215,6 +228,8 @@ public class MovingAnimation extends Animation implements Serializable {
         animation.setStepY(config.getInt("StepY",0));
         animation.setStepZ(config.getInt("StepZ",0));
         animation.setMaxDistance(config.getInt("MaxDistance",0));
+        animation.frame = MCMEStoragePlotFrame.fromSelection(animation.getSelection());
+        animation.background = MCMEStoragePlotFrame.fromSelection(animation.getSelection());
         return animation;
     }
 
