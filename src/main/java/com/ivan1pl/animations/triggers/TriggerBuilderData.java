@@ -20,8 +20,10 @@ package com.ivan1pl.animations.triggers;
 
 import com.ivan1pl.animations.constants.MouseButton;
 import com.ivan1pl.animations.data.AnimationsLocation;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -93,5 +95,61 @@ public class TriggerBuilderData implements Serializable {
 
     public int getFrame() {
         return frame;
+    }
+
+    public void save(ConfigurationSection config) {
+        ConfigurationSection section = config.createSection("TriggerBuilderData");
+        section.set("TriggerType",type.name());
+        section.set("Range",range);
+        if(password!=null) section.set("Password",password);
+        section.set("Frame",frame);
+        section.set("AnimationName",animationName);
+        if(triggerBlocks!=null) {
+            ConfigurationSection blockSection = section.createSection("TriggerBlocks");
+            for (int i = 0; i < triggerBlocks.size(); i++) {
+                triggerBlocks.get(i).save(""+i,blockSection);
+            }
+        }
+        if(triggerButtons!=null) {
+            ConfigurationSection buttonSection = section.createSection("TriggerButtons");
+            for (int i = 0; i < triggerButtons.size(); i++) {
+                buttonSection.set("" + i, triggerButtons.get(i).name());
+            }
+        }
+    }
+
+    public static TriggerBuilderData load(ConfigurationSection config) {
+        ConfigurationSection section = config.getConfigurationSection("TriggerBuilderData");
+        if(section==null) {
+            return null;
+        } else {
+
+            List<AnimationsLocation> triggerBlocks = null;
+            ConfigurationSection blockSection = section.getConfigurationSection("TriggerBlocks");
+            if(blockSection!=null) {
+                triggerBlocks = new ArrayList<>();
+                int i = 0;
+                while (blockSection.isSet("" + i)) {
+                    triggerBlocks.add(AnimationsLocation.load("" + i, blockSection));
+                }
+            }
+            List<MouseButton> triggerButtons = null;
+            ConfigurationSection buttonSection = section.getConfigurationSection("TriggerButtons");
+            if(buttonSection!=null) {
+                triggerButtons = new ArrayList<>();
+                int i = 0;
+                while (buttonSection.isSet("" + i)) {
+                    triggerButtons.add(MouseButton.valueOf(buttonSection.getString(""+i)));
+                }
+            }
+            return new TriggerBuilderData(TriggerType.valueOf(config.getString("TriggerType")),
+                                            config.getInt("Range"),
+                                            config.getString("Password",null),
+                                            triggerBlocks,
+                                            triggerButtons,
+                                            config.getString("AnimationName",null),
+                                            config.getInt("Frame",-1));
+
+        }
     }
 }

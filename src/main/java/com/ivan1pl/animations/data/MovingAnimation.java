@@ -22,6 +22,7 @@ import com.ivan1pl.animations.constants.Messages;
 import com.ivan1pl.animations.exceptions.InvalidSelectionException;
 import com.ivan1pl.animations.utils.SerializationUtils;
 import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -196,4 +197,25 @@ public class MovingAnimation extends Animation implements Serializable {
     public void setMaxDistance(int maxDistance) {
         this.maxDistance = maxDistance;
     }
+
+    @Override
+    public void save(ConfigurationSection config) {
+        super.save(config);
+        selection.save(config);
+        config.set("StepX",stepX);
+        config.set("StepY",stepY);
+        config.set("StepZ",stepZ);
+        config.set("MaxDistance",maxDistance);
+    }
+
+    public static MovingAnimation load(ConfigurationSection config) throws InvalidSelectionException {
+        MovingAnimation animation = new MovingAnimation(Selection.load(config));
+        Animation.load(animation,config);
+        animation.setStepX(config.getInt("StepX",0));
+        animation.setStepY(config.getInt("StepY",0));
+        animation.setStepZ(config.getInt("StepZ",0));
+        animation.setMaxDistance(config.getInt("MaxDistance",0));
+        return animation;
+    }
+
 }

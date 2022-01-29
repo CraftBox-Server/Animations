@@ -162,5 +162,13 @@ public class StationaryAnimation extends Animation implements Serializable {
 
     @Override
     public void save(ConfigurationSection config) {
+        super.save(config);
+        selection.save(config);
+    }
+
+    public static StationaryAnimation load(ConfigurationSection config) throws InvalidSelectionException {
+        StationaryAnimation animation = new StationaryAnimation(Selection.load(config));
+        Animation.load(animation,config);
+        return animation;
     }
 }
