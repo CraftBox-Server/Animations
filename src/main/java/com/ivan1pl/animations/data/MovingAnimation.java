@@ -201,7 +201,7 @@ public class MovingAnimation extends Animation implements Serializable {
     @Override
     public void save(File folder, ConfigurationSection config) {
         super.save(folder, config);
-        config.set("AnimationType",AnimationType.STATIONARY.name());
+        config.set("AnimationType",AnimationType.MOVING.name());
         selection.save(config);
         config.set("StepX",stepX);
         config.set("StepY",stepY);

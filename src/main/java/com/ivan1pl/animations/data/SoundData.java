@@ -29,6 +29,8 @@ import java.io.Serializable;
  */
 public class SoundData implements Serializable {
 
+    private static final long serialVersionUID = -8235280102289513906L;
+
     private String name = null;
     private SoundPlayMode playMode = null;
     private int range;

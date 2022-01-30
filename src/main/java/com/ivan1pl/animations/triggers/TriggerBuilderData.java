@@ -133,6 +133,7 @@ public class TriggerBuilderData implements Serializable {
                 int i = 0;
                 while (blockSection.isSet("" + i)) {
                     triggerBlocks.add(AnimationsLocation.load("" + i, blockSection));
+                    i++;
                 }
             }
             List<MouseButton> triggerButtons = null;
@@ -142,6 +143,7 @@ public class TriggerBuilderData implements Serializable {
                 int i = 0;
                 while (buttonSection.isSet("" + i)) {
                     triggerButtons.add(MouseButton.valueOf(buttonSection.getString(""+i)));
+                    i++;
                 }
             }
             return new TriggerBuilderData(TriggerType.valueOf(section.getString("TriggerType")),
