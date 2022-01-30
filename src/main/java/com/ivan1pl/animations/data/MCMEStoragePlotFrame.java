@@ -75,7 +75,8 @@ public class MCMEStoragePlotFrame implements Serializable, IFrame, IStoragePlot 
     @Override
     public void show(int offsetX, int offsetY, int offsetZ) {
         try(DataInputStream in = new DataInputStream(new ByteArrayInputStream(frameNBTData))) {
-            new MCMEPlotFormat().load(this.getLowCorner().add(new Vector(offsetX, offsetY, offsetZ)),null, in);
+            new MCMEPlotFormat().load(this.getLowCorner().add(new Vector(offsetX, offsetY, offsetZ)),
+                                  0, new boolean[3], true, false, null, in);
         }   catch (IOException | InvalidRestoreDataException ex) {
             Logger.getLogger(MCMEStoragePlotFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
