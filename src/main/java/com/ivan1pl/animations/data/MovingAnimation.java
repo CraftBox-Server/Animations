@@ -228,8 +228,12 @@ public class MovingAnimation extends Animation implements Serializable {
         animation.setStepY(config.getInt("StepY",0));
         animation.setStepZ(config.getInt("StepZ",0));
         animation.setMaxDistance(config.getInt("MaxDistance",0));
-        animation.frame = MCMEStoragePlotFrame.fromSelection(animation.getSelection());
-        animation.background = MCMEStoragePlotFrame.fromSelection(animation.getSelection());
+        animation.frame = MCMEStoragePlotFrame.fromSelection(animation.getSelection(),true);
+        Selection backgroundSelection = animation.selection;
+        backgroundSelection.expand(animation.stepX*animation.getFrameCount(),
+                                   animation.stepY*animation.getFrameCount(),
+                                   animation.stepZ*animation.getFrameCount());
+        animation.background = MCMEStoragePlotFrame.fromSelection(backgroundSelection,true);
         return animation;
     }
 

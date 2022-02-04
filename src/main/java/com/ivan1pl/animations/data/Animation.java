@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.logging.Logger;
 
 /**
  *
@@ -38,6 +39,8 @@ import java.io.Serializable;
 public abstract class Animation implements Serializable {
     
     private static final long serialVersionUID = -7839198751291994315L;
+
+    private String name;
 
     private int interval = 1;
     private TriggerBuilderData triggerBuilderData = null;
@@ -90,6 +93,7 @@ public abstract class Animation implements Serializable {
         if (soundData != null) {
             for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                 if (isPlayerInRange(p, soundData.getRange())) {
+//Logger.getGlobal().info("Player: "+p.getName()+" Sound Name: "+soundData.getName()+" Sound: "+Sound.valueOf(soundData.getName()));
                     p.playSound(getCenter(), Sound.valueOf(soundData.getName()), soundData.getVolume()/100.f, soundData.getPitch()/100.f);
                 }
             }
@@ -124,6 +128,14 @@ public abstract class Animation implements Serializable {
 
     public SoundData getSoundData() {
         return soundData;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setSoundData(SoundData soundData) {

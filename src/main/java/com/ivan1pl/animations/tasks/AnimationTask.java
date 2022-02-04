@@ -27,8 +27,11 @@ import com.ivan1pl.animations.events.AnimationFrameDisplayedEvent;
 import com.ivan1pl.animations.events.Event;
 import com.ivan1pl.animations.events.EventDispatcher;
 import com.ivan1pl.animations.events.EventListener;
+import jdk.internal.jline.internal.Log;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.logging.Logger;
 
 /**
  *
@@ -110,12 +113,16 @@ public class AnimationTask extends BukkitRunnable {
     }
 
     private void playSoundIfNecessary() {
+//Logger.getGlobal().info("playSoundIfNecessary: "+animation.getName()+" "+animation.getSoundData());
         if (animation.getSoundData() == null) {
+//Logger.getGlobal().info("No sound data");
             return;
         }
+//Logger.getGlobal().info("Mode: "+animation.getSoundData().getPlayMode()+" Frame: "+stage);
         if (animation.getSoundData().getPlayMode() == SoundPlayMode.ALL_FRAMES ||
                 (animation.getSoundData().getPlayMode() == SoundPlayMode.BEGIN && stage == 0) ||
                 (animation.getSoundData().getPlayMode() == SoundPlayMode.END && stage == animation.getFrameCount() - 1)) {
+//Logger.getGlobal().info("play sound");
             animation.playSound();
         }
     }

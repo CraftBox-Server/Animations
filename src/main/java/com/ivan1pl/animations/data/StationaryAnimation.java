@@ -188,7 +188,7 @@ public class StationaryAnimation extends Animation implements Serializable {
         }*/
         int frames = config.getInt("Frames");
         for(int i = 0; i < frames; i++) {
-            animation.frames.add(MCMEStoragePlotFrame.fromSelection(animation.getSelection()));
+            animation.frames.add(MCMEStoragePlotFrame.fromSelection(animation.getSelection(), true));
         }
         return animation;
     }

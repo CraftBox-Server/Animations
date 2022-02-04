@@ -93,8 +93,12 @@ public class MCMEStoragePlotFrame implements Serializable, IFrame, IStoragePlot 
                 location.getBlockY() >= y + offsetY && location.getBlockY() <= y + sizeY + offsetY &&
                 location.getBlockZ() >= z + offsetZ && location.getBlockZ() < z + sizeZ + offsetZ);
     }
-    
+
     public static MCMEStoragePlotFrame fromSelection(Selection s) {
+        return fromSelection(s, false);
+    }
+
+    public static MCMEStoragePlotFrame fromSelection(Selection s, boolean noData) {
         if (Selection.isValid(s)) {
             MCMEStoragePlotFrame f = new MCMEStoragePlotFrame();
             int x1 = Math.min(s.getPoint1().getBlockX(), s.getPoint2().getBlockX());
@@ -110,6 +114,8 @@ public class MCMEStoragePlotFrame implements Serializable, IFrame, IStoragePlot 
             f.sizeX = x2 - x1 + 1;
             f.sizeY = y2 - y1 + 1;
             f.sizeZ = z2 - z1 + 1;
+
+            if(noData) return f;
 
             try(ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
                 DataOutputStream out = new DataOutputStream(byteOut)) {
