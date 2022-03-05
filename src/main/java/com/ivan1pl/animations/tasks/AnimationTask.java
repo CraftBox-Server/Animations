@@ -27,11 +27,8 @@ import com.ivan1pl.animations.events.AnimationFrameDisplayedEvent;
 import com.ivan1pl.animations.events.Event;
 import com.ivan1pl.animations.events.EventDispatcher;
 import com.ivan1pl.animations.events.EventListener;
-import jdk.internal.jline.internal.Log;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.logging.Logger;
 
 /**
  *
