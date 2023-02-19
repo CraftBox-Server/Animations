@@ -60,14 +60,11 @@ public class BlockTrigger extends BaseRangeTrigger {
     }
     
     private boolean checkAction(Action action) {
-        if (null != triggerButton) switch (triggerButton) {
-            case BOTH:
-                return action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK;
-            case LEFT:
-                return action == Action.LEFT_CLICK_BLOCK;
-            case RIGHT:
-                return action == Action.RIGHT_CLICK_BLOCK;
-        }
+        if (null != triggerButton) return switch (triggerButton) {
+            case BOTH -> action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK;
+            case LEFT -> action == Action.LEFT_CLICK_BLOCK;
+            case RIGHT -> action == Action.RIGHT_CLICK_BLOCK;
+        };
         return false;
     }
     

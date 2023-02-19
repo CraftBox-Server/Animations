@@ -14,14 +14,10 @@ public class AnimationFactory {
         try {
             config.load(file);
             AnimationType type = AnimationType.valueOf(config.getString("AnimationType"));
-            Animation animation = null;
-            switch(type) {
-                case STATIONARY:
-                    animation = StationaryAnimation.load(config);
-                    break;
-                case MOVING:
-                    animation = MovingAnimation.load(config);
-            }
+            Animation animation = switch (type) {
+                case STATIONARY -> StationaryAnimation.load(config);
+                case MOVING -> MovingAnimation.load(config);
+            };
             animation.setName(file.getParent());
             return animation;
         } catch (IOException | InvalidConfigurationException | InvalidSelectionException e) {

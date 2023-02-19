@@ -40,8 +40,7 @@ public class Selection implements Serializable {
     }
     
     public static boolean isValid(Selection sel) {
-        boolean ret = sel == null ? false : sel.validate();
-        return ret;
+        return sel != null && sel.validate();
     }
     
     public void setPoint1(Location loc) {
@@ -117,8 +116,7 @@ public class Selection implements Serializable {
         double dx = Math.max(Math.max(minX - l.getX(), l.getX() - maxX), 0);
         double dy = Math.max(Math.max(minY - l.getY(), l.getY() - maxY), 0);
         double dz = Math.max(Math.max(minZ - l.getZ(), l.getZ() - maxZ), 0);
-        double dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-        return dist;
+        return Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
 
     public Location getCenter() {

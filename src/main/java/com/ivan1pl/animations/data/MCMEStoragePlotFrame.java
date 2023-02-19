@@ -30,7 +30,6 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Fence;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
@@ -175,7 +174,6 @@ public class MCMEStoragePlotFrame implements Serializable, IFrame, IStoragePlot 
                                    new FileOutputStream(file)))) {
             out.write(frameNBTData);
             out.flush();
-            out.close();
         } catch (IOException ex) {
             Logger.getLogger(MCMEStoragePlotFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -187,7 +185,7 @@ public class MCMEStoragePlotFrame implements Serializable, IFrame, IStoragePlot 
                                  new FileInputStream(file)));
             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             byte[] buffer = new byte[1024];
-            int readBytes = 0;
+            int readBytes;
             do {
                 readBytes = in.read(buffer,0,buffer.length);
                 out.write(buffer, 0, readBytes);

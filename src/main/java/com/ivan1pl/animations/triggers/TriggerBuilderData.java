@@ -60,7 +60,7 @@ public class TriggerBuilderData implements Serializable {
     }
     
     public TriggerBuilderData(TriggerType type, int range, AnimationsLocation triggerBlock1, MouseButton triggerButton1) {
-        this (type, range, null, Arrays.asList(triggerBlock1), Arrays.asList(triggerButton1), null, -1);
+        this (type, range, null, List.of(triggerBlock1), List.of(triggerButton1), null, -1);
     }
     
     public TriggerBuilderData(TriggerType type, int range) {

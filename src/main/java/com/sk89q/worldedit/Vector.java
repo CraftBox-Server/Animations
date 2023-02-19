@@ -61,9 +61,9 @@ public class Vector implements Comparable<Vector> {
      * @param z the Z coordinate
      */
     public Vector(int x, int y, int z) {
-        this.x = (double) x;
-        this.y = (double) y;
-        this.z = (double) z;
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
     /**
@@ -74,9 +74,9 @@ public class Vector implements Comparable<Vector> {
      * @param z the Z coordinate
      */
     public Vector(float x, float y, float z) {
-        this.x = (double) x;
-        this.y = (double) y;
-        this.z = (double) z;
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
     /**

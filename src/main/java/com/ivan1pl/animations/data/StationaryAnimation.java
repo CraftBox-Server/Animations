@@ -29,7 +29,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  *
@@ -181,11 +180,6 @@ public class StationaryAnimation extends Animation implements Serializable {
     public static StationaryAnimation load(ConfigurationSection config) throws InvalidSelectionException {
         StationaryAnimation animation = new StationaryAnimation(Selection.load(config));
         Animation.load(animation,config);
-        /*ConfigurationSection frameSection = config.getConfigurationSection("Frames");
-        int i = 0;
-        while (frameSection.isSet("" + i)) {
-            animation.frames.add(MCMEStoragePlotFrame.load("" + i, frameSection));
-        }*/
         int frames = config.getInt("Frames");
         for(int i = 0; i < frames; i++) {
             animation.frames.add(MCMEStoragePlotFrame.fromSelection(animation.getSelection(), true));

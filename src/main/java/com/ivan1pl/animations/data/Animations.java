@@ -241,9 +241,8 @@ public class Animations {
         if (p == null) {
             return null;
         }
-        
-        Location l = blockSelections.get(p.getUniqueId());
-        return l;
+
+        return blockSelections.get(p.getUniqueId());
     }
     
     public static void setBlockSelection(Player p, Location selection) {

@@ -130,19 +130,11 @@ public class BlockIdFrame implements Serializable, IFrame {
                         }
                         if(data instanceof Stairs) {
                             Stairs stair =  (Stairs)data;
-                            switch(stair.getFacing()) {
-                                case NORTH:
-                                    connectStair(stair, north, south, stair.getFacing());
-                                    break;
-                                case SOUTH:
-                                    connectStair(stair, south, north, stair.getFacing());
-                                    break;
-                                case WEST:
-                                    connectStair(stair, west, east, stair.getFacing());
-                                    break;
-                                case EAST:
-                                    connectStair(stair, east, west, stair.getFacing());
-                                    break;
+                            switch (stair.getFacing()) {
+                                case NORTH -> connectStair(stair, north, south, stair.getFacing());
+                                case SOUTH -> connectStair(stair, south, north, stair.getFacing());
+                                case WEST -> connectStair(stair, west, east, stair.getFacing());
+                                case EAST -> connectStair(stair, east, west, stair.getFacing());
                             }
                             
                         }
@@ -196,21 +188,12 @@ public class BlockIdFrame implements Serializable, IFrame {
         if(repetitions <= 0) {
             return face;
         }
-        BlockFace result;
-        switch(face) {
-            case NORTH:
-                result = BlockFace.EAST;
-                break;
-            case EAST:
-                result = BlockFace.SOUTH;
-                break;
-            case SOUTH:
-                result = BlockFace.WEST;
-                break;
-            default:
-                result = BlockFace.NORTH;
-                break;
-        }
+        BlockFace result = switch (face) {
+            case NORTH -> BlockFace.EAST;
+            case EAST -> BlockFace.SOUTH;
+            case SOUTH -> BlockFace.WEST;
+            default -> BlockFace.NORTH;
+        };
         return rotate(result, repetitions-1);
     }
     
