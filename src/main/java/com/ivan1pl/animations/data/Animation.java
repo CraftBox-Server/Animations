@@ -23,6 +23,7 @@ import com.ivan1pl.animations.triggers.TriggerBuilderData;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -37,6 +38,8 @@ import java.io.Serializable;
 public abstract class Animation implements Serializable {
     
     private static final long serialVersionUID = -7839198751291994315L;
+
+    private String name;
 
     private int interval = 1;
     private TriggerBuilderData triggerBuilderData = null;
@@ -89,6 +92,7 @@ public abstract class Animation implements Serializable {
         if (soundData != null) {
             for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                 if (isPlayerInRange(p, soundData.getRange())) {
+//Logger.getGlobal().info("Player: "+p.getName()+" Sound Name: "+soundData.getName()+" Sound: "+Sound.valueOf(soundData.getName()));
                     p.playSound(getCenter(), Sound.valueOf(soundData.getName()), soundData.getVolume()/100.f, soundData.getPitch()/100.f);
                 }
             }
@@ -125,7 +129,28 @@ public abstract class Animation implements Serializable {
         return soundData;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void setSoundData(SoundData soundData) {
         this.soundData = soundData;
     }
+
+    public void save(File folder, ConfigurationSection config) {
+        config.set("Interval",interval);
+        if(soundData!=null) soundData.save(config);
+        if(triggerBuilderData!=null) triggerBuilderData.save(config);
+    }
+
+    public static void load(Animation animation, ConfigurationSection config) {
+        animation.interval = config.getInt("Interval");
+        animation.setSoundData(SoundData.load(config));
+        animation.setTriggerBuilderData(TriggerBuilderData.load(config));
+    }
+
 }

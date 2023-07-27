@@ -22,6 +22,7 @@ import com.ivan1pl.animations.constants.Messages;
 import com.ivan1pl.animations.exceptions.InvalidSelectionException;
 import com.ivan1pl.animations.utils.SerializationUtils;
 import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -196,4 +197,44 @@ public class MovingAnimation extends Animation implements Serializable {
     public void setMaxDistance(int maxDistance) {
         this.maxDistance = maxDistance;
     }
+
+    @Override
+    public void save(File folder, ConfigurationSection config) {
+        super.save(folder, config);
+        config.set("AnimationType",AnimationType.MOVING.name());
+        selection.save(config);
+        config.set("StepX",stepX);
+        config.set("StepY",stepY);
+        config.set("StepZ",stepZ);
+        config.set("MaxDistance",maxDistance);
+        if(background instanceof MCMEStoragePlotFrame) {
+            if(!folder.exists()) {
+                folder.mkdir();
+            }
+            ((MCMEStoragePlotFrame)background).save(new File(folder,"background.mcme"));
+        }
+        if(frame instanceof MCMEStoragePlotFrame) {
+            if(!folder.exists()) {
+                folder.mkdir();
+            }
+            ((MCMEStoragePlotFrame)frame).save(new File(folder,"frame.mcme"));
+        }
+    }
+
+    public static MovingAnimation load(ConfigurationSection config) throws InvalidSelectionException {
+        MovingAnimation animation = new MovingAnimation(Selection.load(config));
+        Animation.load(animation,config);
+        animation.setStepX(config.getInt("StepX",0));
+        animation.setStepY(config.getInt("StepY",0));
+        animation.setStepZ(config.getInt("StepZ",0));
+        animation.setMaxDistance(config.getInt("MaxDistance",0));
+        animation.frame = MCMEStoragePlotFrame.fromSelection(animation.getSelection(),true);
+        Selection backgroundSelection = animation.selection;
+        backgroundSelection.expand(animation.stepX*animation.getFrameCount(),
+                                   animation.stepY*animation.getFrameCount(),
+                                   animation.stepZ*animation.getFrameCount());
+        animation.background = MCMEStoragePlotFrame.fromSelection(backgroundSelection,true);
+        return animation;
+    }
+
 }

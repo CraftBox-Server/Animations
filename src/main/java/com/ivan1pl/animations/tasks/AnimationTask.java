@@ -110,12 +110,16 @@ public class AnimationTask extends BukkitRunnable {
     }
 
     private void playSoundIfNecessary() {
+//Logger.getGlobal().info("playSoundIfNecessary: "+animation.getName()+" "+animation.getSoundData());
         if (animation.getSoundData() == null) {
+//Logger.getGlobal().info("No sound data");
             return;
         }
+//Logger.getGlobal().info("Mode: "+animation.getSoundData().getPlayMode()+" Frame: "+stage);
         if (animation.getSoundData().getPlayMode() == SoundPlayMode.ALL_FRAMES ||
                 (animation.getSoundData().getPlayMode() == SoundPlayMode.BEGIN && stage == 0) ||
                 (animation.getSoundData().getPlayMode() == SoundPlayMode.END && stage == animation.getFrameCount() - 1)) {
+//Logger.getGlobal().info("play sound");
             animation.playSound();
         }
     }

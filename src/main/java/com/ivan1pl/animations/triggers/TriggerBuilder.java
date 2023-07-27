@@ -67,12 +67,12 @@ public class TriggerBuilder {
     }
     
     public TriggerBuilder setTriggerBlock(AnimationsLocation triggerBlock) {
-        this.triggerBlocks = Arrays.asList(triggerBlock);
+        this.triggerBlocks = List.of(triggerBlock);
         return this;
     }
     
     public TriggerBuilder setTriggerButton(MouseButton triggerButton) {
-        this.triggerButtons = Arrays.asList(triggerButton);
+        this.triggerButtons = List.of(triggerButton);
         return this;
     }
     

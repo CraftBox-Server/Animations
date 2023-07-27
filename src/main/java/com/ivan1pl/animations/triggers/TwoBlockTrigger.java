@@ -56,26 +56,20 @@ public class TwoBlockTrigger extends BaseTrigger {
     }
     
     private boolean checkAction1(Action action) {
-        if (null != triggerButton1) switch (triggerButton1) {
-            case BOTH:
-                return action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK;
-            case LEFT:
-                return action == Action.LEFT_CLICK_BLOCK;
-            case RIGHT:
-                return action == Action.RIGHT_CLICK_BLOCK;
-        }
+        if (null != triggerButton1) return switch (triggerButton1) {
+            case BOTH -> action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK;
+            case LEFT -> action == Action.LEFT_CLICK_BLOCK;
+            case RIGHT -> action == Action.RIGHT_CLICK_BLOCK;
+        };
         return false;
     }
     
     private boolean checkAction2(Action action) {
-        if (null != triggerButton2) switch (triggerButton2) {
-            case BOTH:
-                return action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK;
-            case LEFT:
-                return action == Action.LEFT_CLICK_BLOCK;
-            case RIGHT:
-                return action == Action.RIGHT_CLICK_BLOCK;
-        }
+        if (null != triggerButton2) return switch (triggerButton2) {
+            case BOTH -> action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK;
+            case LEFT -> action == Action.LEFT_CLICK_BLOCK;
+            case RIGHT -> action == Action.RIGHT_CLICK_BLOCK;
+        };
         return false;
     }
     

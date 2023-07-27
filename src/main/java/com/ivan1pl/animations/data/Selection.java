@@ -19,6 +19,8 @@
 package com.ivan1pl.animations.data;
 
 import org.bukkit.Location;
+import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.io.Serializable;
 
@@ -27,6 +29,8 @@ import java.io.Serializable;
  * @author Ivan1pl
  */
 public class Selection implements Serializable {
+
+    private static final long serialVersionUID = 3063220770448203490L;
     
     private AnimationsLocation point1;
     private AnimationsLocation point2;
@@ -36,8 +40,7 @@ public class Selection implements Serializable {
     }
     
     public static boolean isValid(Selection sel) {
-        boolean ret = sel == null ? false : sel.validate();
-        return ret;
+        return sel != null && sel.validate();
     }
     
     public void setPoint1(Location loc) {
@@ -113,8 +116,7 @@ public class Selection implements Serializable {
         double dx = Math.max(Math.max(minX - l.getX(), l.getX() - maxX), 0);
         double dy = Math.max(Math.max(minY - l.getY(), l.getY() - maxY), 0);
         double dz = Math.max(Math.max(minZ - l.getZ(), l.getZ() - maxZ), 0);
-        double dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-        return dist;
+        return Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
 
     public Location getCenter() {
@@ -124,11 +126,31 @@ public class Selection implements Serializable {
         return new Location(point1.getWorld(), cX, cY, cZ);
     }
 
+    public Location getLowerCorner() {
+        return new Location(point1.getWorld(), Math.min(point1.getBlockX(), point2.getBlockX()),
+                Math.min(point1.getBlockY(), point2.getBlockY()),
+                Math.min(point1.getBlockZ(), point2.getBlockZ()));
+    }
+
     public AnimationsLocation getPoint1() {
         return point1;
     }
 
     public AnimationsLocation getPoint2() {
         return point2;
+    }
+
+    public void save(ConfigurationSection config) {
+        ConfigurationSection section = config.createSection("Selection");
+        point1.save("Point1",section);
+        point2.save("Point2",section);
+    }
+
+    public static Selection load(ConfigurationSection config) {
+        ConfigurationSection section = config.getConfigurationSection("Selection");
+        Selection selection = new Selection();
+        selection.point1 = (AnimationsLocation.load("Point1",section));
+        selection.point2 = (AnimationsLocation.load("Point2",section));
+        return selection;
     }
 }

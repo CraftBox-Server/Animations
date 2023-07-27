@@ -22,6 +22,7 @@ import com.sk89q.worldedit.Vector;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -112,5 +113,24 @@ public class AnimationsLocation implements Serializable {
 
     public void setZ(double z) {
         this.z = z;
+    }
+
+    public void save(String key, ConfigurationSection config) {
+        ConfigurationSection section = config.createSection(key);
+        section.set("X",x);
+        section.set("Y",y);
+        section.set("Z",z);
+    }
+
+    public static AnimationsLocation load(String key, ConfigurationSection config) {
+        ConfigurationSection section = config.getConfigurationSection(key);
+        if(section != null) {
+            return new AnimationsLocation(Bukkit.getWorlds().get(0),
+                    section.getDouble("X"),
+                    section.getDouble("Y"),
+                    section.getDouble("Z"));
+        } else {
+            return null;
+        }
     }
 }

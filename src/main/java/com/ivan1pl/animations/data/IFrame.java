@@ -13,15 +13,15 @@ import org.bukkit.Location;
  */
 public interface IFrame {
   
-    public int getSizeX();
-    public int getSizeY();
-    public int getSizeZ();
+    int getSizeX();
+    int getSizeY();
+    int getSizeZ();
 
-    public void show();
-    public void show(int offsetX, int offsetY, int offsetZ);
-    public boolean isInside(Location location, int offsetX, int offsetY, int offsetZ);
-    public Selection toSelection();
-    public Location getCenter();
-    public boolean isOutdated();
+    void show();
+    void show(int offsetX, int offsetY, int offsetZ);
+    boolean isInside(Location location, int offsetX, int offsetY, int offsetZ);
+    Selection toSelection();
+    Location getCenter();
+    boolean isOutdated();
 
 }

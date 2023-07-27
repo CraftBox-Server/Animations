@@ -74,7 +74,8 @@ public class MCMEStoragePlotFrame implements Serializable, IFrame, IStoragePlot 
     @Override
     public void show(int offsetX, int offsetY, int offsetZ) {
         try(DataInputStream in = new DataInputStream(new ByteArrayInputStream(frameNBTData))) {
-            new MCMEPlotFormat().load(this.getLowCorner().add(new Vector(offsetX, offsetY, offsetZ)),null, in);
+            new MCMEPlotFormat().load(this.getLowCorner().add(new Vector(offsetX, offsetY, offsetZ)),
+                                  0, new boolean[3], true, false, null, true, in);
         }   catch (IOException | InvalidRestoreDataException ex) {
             Logger.getLogger(MCMEStoragePlotFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -91,8 +92,12 @@ public class MCMEStoragePlotFrame implements Serializable, IFrame, IStoragePlot 
                 location.getBlockY() >= y + offsetY && location.getBlockY() <= y + sizeY + offsetY &&
                 location.getBlockZ() >= z + offsetZ && location.getBlockZ() < z + sizeZ + offsetZ);
     }
-    
+
     public static MCMEStoragePlotFrame fromSelection(Selection s) {
+        return fromSelection(s, false);
+    }
+
+    public static MCMEStoragePlotFrame fromSelection(Selection s, boolean noData) {
         if (Selection.isValid(s)) {
             MCMEStoragePlotFrame f = new MCMEStoragePlotFrame();
             int x1 = Math.min(s.getPoint1().getBlockX(), s.getPoint2().getBlockX());
@@ -108,6 +113,8 @@ public class MCMEStoragePlotFrame implements Serializable, IFrame, IStoragePlot 
             f.sizeX = x2 - x1 + 1;
             f.sizeY = y2 - y1 + 1;
             f.sizeZ = z2 - z1 + 1;
+
+            if(noData) return f;
 
             try(ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
                 DataOutputStream out = new DataOutputStream(byteOut)) {
@@ -167,7 +174,6 @@ public class MCMEStoragePlotFrame implements Serializable, IFrame, IStoragePlot 
                                    new FileOutputStream(file)))) {
             out.write(frameNBTData);
             out.flush();
-            out.close();
         } catch (IOException ex) {
             Logger.getLogger(MCMEStoragePlotFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -179,7 +185,7 @@ public class MCMEStoragePlotFrame implements Serializable, IFrame, IStoragePlot 
                                  new FileInputStream(file)));
             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             byte[] buffer = new byte[1024];
-            int readBytes = 0;
+            int readBytes;
             do {
                 readBytes = in.read(buffer,0,buffer.length);
                 out.write(buffer, 0, readBytes);
@@ -286,4 +292,28 @@ public class MCMEStoragePlotFrame implements Serializable, IFrame, IStoragePlot 
     public String getWorldName() {
         return worldName;
     }
+
+    /*public void save(String key, ConfigurationSection config) {
+        ConfigurationSection section = config.createSection(key);
+        section.set("WorldName", worldName);
+        section.set("X",x);
+        section.set("Y",y);
+        section.set("Z",z);
+        section.set("SizeX",sizeX);
+        section.set("SizeY",sizeY);
+        section.set("SizeZ",sizeZ);
+    }
+
+    public static MCMEStoragePlotFrame load(String key, ConfigurationSection config) {
+        ConfigurationSection section = config.getConfigurationSection(key);
+        MCMEStoragePlotFrame frame = new MCMEStoragePlotFrame();
+        frame.worldName = section.getString("WorldName");
+        frame.x = section.getInt("X");
+        frame.y= section.getInt("Y");
+        frame.z = section.getInt("Z");
+        frame.sizeX = section.getInt("SizeX");
+        frame.sizeY = section.getInt("SizeY");
+        frame.sizeZ = section.getInt("SizeZ");
+        return frame;
+    }*/
 }

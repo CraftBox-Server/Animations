@@ -20,6 +20,7 @@ package com.ivan1pl.animations.events;
 
 import com.ivan1pl.animations.data.Animation;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 /**
  *
@@ -36,7 +37,7 @@ public abstract class AnimationEvent extends org.bukkit.event.Event {
     }
     
     @Override
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return handlers;
     }
 

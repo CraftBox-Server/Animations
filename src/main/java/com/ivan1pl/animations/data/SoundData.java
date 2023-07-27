@@ -19,6 +19,7 @@
 package com.ivan1pl.animations.data;
 
 import com.ivan1pl.animations.constants.SoundPlayMode;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.io.Serializable;
 
@@ -27,6 +28,8 @@ import java.io.Serializable;
  * @author Ivan1pl
  */
 public class SoundData implements Serializable {
+
+    private static final long serialVersionUID = -8235280102289513906L;
 
     private String name = null;
     private SoundPlayMode playMode = null;
@@ -72,5 +75,28 @@ public class SoundData implements Serializable {
 
     public void setVolume(int volume) {
         this.volume = volume;
+    }
+
+    public void save(ConfigurationSection config) {
+        ConfigurationSection section = config.createSection("SoundData");
+        if(name!=null) section.set("Name",name);
+        if(playMode!=null) section.set("PlayMode",playMode.name());
+        section.set("Range",range);
+        section.set("Pitch",pitch);
+        section.set("Volume",volume);
+    }
+
+    public static SoundData load(ConfigurationSection config) {
+        if (config.isConfigurationSection("SoundData")) {
+            ConfigurationSection section = config.getConfigurationSection("SoundData");
+            SoundData soundData = new SoundData();
+            if (section.isSet("Name")) soundData.setName(section.getString("Name"));
+            if (section.isSet("PlayMode")) soundData.setPlayMode(SoundPlayMode.valueOf(section.getString("PlayMode")));
+            if (section.isSet("Range")) soundData.setRange(section.getInt("Range"));
+            if (section.isSet("Pitch")) soundData.setPitch(section.getInt("Pitch"));
+            if (section.isSet("Volume")) soundData.setVolume(section.getInt("Volume"));
+            return soundData;
+        }
+        return null;
     }
 }

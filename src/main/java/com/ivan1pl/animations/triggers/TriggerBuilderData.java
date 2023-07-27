@@ -20,8 +20,10 @@ package com.ivan1pl.animations.triggers;
 
 import com.ivan1pl.animations.constants.MouseButton;
 import com.ivan1pl.animations.data.AnimationsLocation;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,7 +34,9 @@ import java.util.List;
  * @author Ivan1pl
  */
 public class TriggerBuilderData implements Serializable {
-    
+
+    private static final long serialVersionUID = -955742584558670327L;
+
     private final TriggerType type;
     private final int range;
     private final String password;
@@ -56,7 +60,7 @@ public class TriggerBuilderData implements Serializable {
     }
     
     public TriggerBuilderData(TriggerType type, int range, AnimationsLocation triggerBlock1, MouseButton triggerButton1) {
-        this (type, range, null, Arrays.asList(triggerBlock1), Arrays.asList(triggerButton1), null, -1);
+        this (type, range, null, List.of(triggerBlock1), List.of(triggerButton1), null, -1);
     }
     
     public TriggerBuilderData(TriggerType type, int range) {
@@ -93,5 +97,63 @@ public class TriggerBuilderData implements Serializable {
 
     public int getFrame() {
         return frame;
+    }
+
+    public void save(ConfigurationSection config) {
+        ConfigurationSection section = config.createSection("TriggerBuilderData");
+        section.set("TriggerType",type.name());
+        section.set("Range",range);
+        if(password!=null) section.set("Password",password);
+        section.set("Frame",frame);
+        section.set("AnimationName",animationName);
+        if(triggerBlocks!=null) {
+            ConfigurationSection blockSection = section.createSection("TriggerBlocks");
+            for (int i = 0; i < triggerBlocks.size(); i++) {
+                triggerBlocks.get(i).save(""+i,blockSection);
+            }
+        }
+        if(triggerButtons!=null) {
+            ConfigurationSection buttonSection = section.createSection("TriggerButtons");
+            for (int i = 0; i < triggerButtons.size(); i++) {
+                buttonSection.set("" + i, triggerButtons.get(i).name());
+            }
+        }
+    }
+
+    public static TriggerBuilderData load(ConfigurationSection config) {
+        ConfigurationSection section = config.getConfigurationSection("TriggerBuilderData");
+        if(section==null) {
+            return null;
+        } else {
+
+            List<AnimationsLocation> triggerBlocks = null;
+            ConfigurationSection blockSection = section.getConfigurationSection("TriggerBlocks");
+            if(blockSection!=null) {
+                triggerBlocks = new ArrayList<>();
+                int i = 0;
+                while (blockSection.isSet("" + i)) {
+                    triggerBlocks.add(AnimationsLocation.load("" + i, blockSection));
+                    i++;
+                }
+            }
+            List<MouseButton> triggerButtons = null;
+            ConfigurationSection buttonSection = section.getConfigurationSection("TriggerButtons");
+            if(buttonSection!=null) {
+                triggerButtons = new ArrayList<>();
+                int i = 0;
+                while (buttonSection.isSet("" + i)) {
+                    triggerButtons.add(MouseButton.valueOf(buttonSection.getString(""+i)));
+                    i++;
+                }
+            }
+            return new TriggerBuilderData(TriggerType.valueOf(section.getString("TriggerType")),
+                    section.getInt("Range"),
+                    section.getString("Password",null),
+                    triggerBlocks,
+                    triggerButtons,
+                    section.getString("AnimationName",null),
+                    section.getInt("Frame",-1));
+
+        }
     }
 }
